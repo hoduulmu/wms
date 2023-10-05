@@ -20,5 +20,4 @@ class RegisterProductTest extends ApiTest {
         Scenario.registerProduct().request();
         assertThat(productRepository.findAll()).hasSize(1);
     }
-
 }

@@ -1,24 +1,67 @@
 package com.kjh.wms.product.domain;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import static org.springframework.util.Assert.hasText;
 import static org.springframework.util.Assert.notNull;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Comment("상품")
+@Table(name = "product")
+@Entity
 public class Product {
 
     @Getter
-    private Long id;
-    private final String name;
-    private final String code;
-    private final String description;
-    private final String brand;
-    private final String maker;
-    private final String origin;
-    private final Category electronics;
-    private final TemperatureZone roomTemperature;
-    private final Long weightInGrams;
-    private final ProductSize productSize;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_no")
+    @Comment("상품 번호")
+    private Long productNo;
+
+    @Column(name = "name", nullable = false)
+    @Comment("상품명")
+    private String name;
+
+    @Column(name = "code", nullable = false, unique = true)
+    @Comment("상품 코드")
+    private String code;
+
+    @Column(name = "description", nullable = false)
+    @Comment("상품 설명")
+    private String description;
+
+    @Column(name = "brand", nullable = false)
+    @Comment("브랜드")
+    private String brand;
+
+    @Column(name = "maker", nullable = false)
+    @Comment("제조사")
+    private String maker;
+
+    @Column(name = "origin", nullable = false)
+    @Comment("원산지")
+    private String origin;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    @Comment("카테고리")
+    private Category category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "temperature_zone", nullable = false)
+    @Comment("온도대")
+    private TemperatureZone temperatureZone;
+
+    @Column(name = "weight_in_grams", nullable = false)
+    @Comment("상품 무게 (그램)")
+    private Long weightInGrams;
+
+    @Embedded
+    private ProductSize productSize;
 
 
     public Product(String name,
@@ -27,8 +70,8 @@ public class Product {
                    String brand,
                    String maker,
                    String origin,
-                   Category electronics,
-                   TemperatureZone roomTemperature,
+                   Category category,
+                   TemperatureZone temperatureZone,
                    Long weightInGrams,
                    ProductSize productSize) {
         validateConstructor(name,
@@ -37,8 +80,8 @@ public class Product {
                 brand,
                 maker,
                 origin,
-                electronics,
-                roomTemperature,
+                category,
+                temperatureZone,
                 weightInGrams,
                 productSize);
         this.name = name;
@@ -47,8 +90,8 @@ public class Product {
         this.brand = brand;
         this.maker = maker;
         this.origin = origin;
-        this.electronics = electronics;
-        this.roomTemperature = roomTemperature;
+        this.category = category;
+        this.temperatureZone = temperatureZone;
         this.weightInGrams = weightInGrams;
         this.productSize = productSize;
     }
@@ -78,8 +121,8 @@ public class Product {
         }
     }
 
-    public void assignId(Long id) {
-        this.id = id;
+    public void assignProductNo(Long productNo) {
+        this.productNo = productNo;
     }
 
 }
