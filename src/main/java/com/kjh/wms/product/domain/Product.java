@@ -1,4 +1,4 @@
-package com.kjh.wms.product.feature;
+package com.kjh.wms.product.domain;
 
 import static org.springframework.util.Assert.hasText;
 import static org.springframework.util.Assert.notNull;

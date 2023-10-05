@@ -1,4 +1,4 @@
-package com.kjh.wms.product.feature;
+package com.kjh.wms.product.domain;
 
 import java.util.HashMap;
 import java.util.List;

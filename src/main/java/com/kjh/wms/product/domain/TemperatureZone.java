@@ -1,4 +1,4 @@
-package com.kjh.wms.product.feature;
+package com.kjh.wms.product.domain;
 
 public enum TemperatureZone {
     ROOM_TEMPERATURE("상온");
