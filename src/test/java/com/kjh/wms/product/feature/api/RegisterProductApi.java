@@ -1,5 +1,6 @@
 package com.kjh.wms.product.feature.api;
 
+import com.kjh.wms.common.Scenario;
 import com.kjh.wms.product.domain.Category;
 import com.kjh.wms.product.domain.TemperatureZone;
 import com.kjh.wms.product.feature.RegisterProduct;
@@ -82,7 +83,7 @@ public class RegisterProductApi {
         return this;
     }
 
-    public void request() {
+    public Scenario request() {
 
         RegisterProduct.Request request = new RegisterProduct.Request(
                 name,
@@ -106,5 +107,7 @@ public class RegisterProductApi {
                 .post("/products")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
+
+        return new Scenario();
     }
 }

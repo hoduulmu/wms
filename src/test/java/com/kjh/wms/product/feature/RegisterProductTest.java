@@ -1,8 +1,8 @@
 package com.kjh.wms.product.feature;
 
 import com.kjh.wms.common.ApiTest;
+import com.kjh.wms.common.Scenario;
 import com.kjh.wms.product.domain.ProductRepository;
-import com.kjh.wms.product.feature.api.RegisterProductApi;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ class RegisterProductTest extends ApiTest {
     @Test
     @DisplayName("상품을 등록한다")
     void registerProduct() {
-        new RegisterProductApi().request();
+        Scenario.registerProduct().request();
         assertThat(productRepository.findAll()).hasSize(1);
     }
 
