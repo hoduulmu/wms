@@ -1,10 +1,13 @@
 package com.kjh.wms.product.domain;
 
+import lombok.Getter;
+
 import static org.springframework.util.Assert.hasText;
 import static org.springframework.util.Assert.notNull;
 
 public class Product {
 
+    @Getter
     private Long id;
     private final String name;
     private final String code;
@@ -79,7 +82,4 @@ public class Product {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
-    }
 }
