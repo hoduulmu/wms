@@ -19,8 +19,15 @@ public class RegisterProduct {
     @PostMapping("/products")
     @ResponseStatus(HttpStatus.CREATED)
     public void request(@RequestBody final Request request) {
+        validateProductCodeExists(request.code());
         Product product = request.toDomain();
         productRepository.save(product);
+    }
+
+    private void validateProductCodeExists(final String code) {
+        if (productRepository.existsByCode(code)) {
+            throw new IllegalArgumentException("이미 존재하는 상품 코드입니다 %s".formatted(code));
+        }
     }
 
     public record Request(@NotBlank(message = "상품명은 필수입니다")
