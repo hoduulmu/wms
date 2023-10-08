@@ -1,37 +1,67 @@
 package com.kjh.wms.inbound.domain;
 
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@Comment("입고")
+@Table(name = "inbound")
+@Entity
 public class Inbound {
 
     @Getter
-    private Long id;
-    private final String title;
-    private final String description;
-    private final LocalDateTime orderRequestedAt;
-    private final LocalDateTime estimateArrivalAt;
-    private final List<InboundItem> inboundItems;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "inbound_no")
+    @Comment("입고 번호")
+    private Long inboundNo;
+
+    @Column(name = "title", nullable = false)
+    @Comment("입고 제목")
+    private String title;
+
+    @Column(name = "description", nullable = false)
+    @Comment("입고 설명")
+    private String description;
+
+    @Column(name = "order_requested_at", nullable = false)
+    @Comment("입고 요청일시")
+    private LocalDateTime orderRequestedAt;
+
+    @Column(name = "estimated_arrival_at", nullable = false)
+    @Comment("입고 예정일시")
+    private LocalDateTime estimatedArrivalAt;
+
+    @OneToMany(mappedBy = "inbound", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<InboundItem> inboundItems = new ArrayList<>();
 
     public Inbound(String title,
                    String description,
                    LocalDateTime orderRequestedAt,
-                   LocalDateTime estimateArrivalAt,
+                   LocalDateTime estimatedArrivalAt,
                    List<InboundItem> inboundItems) {
         validateConstructor(
                 title,
                 description,
                 orderRequestedAt,
-                estimateArrivalAt,
+                estimatedArrivalAt,
                 inboundItems);
         this.title = title;
         this.description = description;
         this.orderRequestedAt = orderRequestedAt;
-        this.estimateArrivalAt = estimateArrivalAt;
-        this.inboundItems = inboundItems;
+        this.estimatedArrivalAt = estimatedArrivalAt;
+        for (InboundItem inboundItem : inboundItems) {
+            this.inboundItems.add(inboundItem);
+            inboundItem.assignInbound(this);
+        }
     }
 
     private void validateConstructor(final String title,
@@ -44,9 +74,5 @@ public class Inbound {
         Assert.notNull(orderRequestedAt, "입고 요청일은 필수입니다");
         Assert.notNull(estimateArrivalAt, "입고 예정일은 필수입니다");
         Assert.notEmpty(inboundItems, "입고 품목은 필수입니다");
-    }
-
-    public void assignId(Long id) {
-        this.id = id;
     }
 }
