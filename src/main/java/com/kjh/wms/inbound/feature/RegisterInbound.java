@@ -20,23 +20,31 @@ public class RegisterInbound {
     }
 
     public void request(Request request) {
+        final Inbound inbound = createInbound(request);
+        inboundRepository.save(inbound);
+    }
 
-        final List<InboundItem> inboundItems = request.inboundItems.stream()
-                .map(item -> new InboundItem(
-                        productRepository.findById(item.productNo()).orElseThrow(),
-                        item.quantity(),
-                        item.unitPrice(),
-                        item.description()))
-                .toList();
-
-        final Inbound inbound = new Inbound(
+    private Inbound createInbound(Request request) {
+        return new Inbound(
                 request.title(),
                 request.description(),
                 request.orderRequestedAt(),
                 request.estimateArrivalAt(),
-                inboundItems);
+                mapToInboundItems(request));
+    }
 
-        inboundRepository.save(inbound);
+    private List<InboundItem> mapToInboundItems(Request request) {
+        return request.inboundItems.stream()
+                .map(this::newInboundItem)
+                .toList();
+    }
+
+    private InboundItem newInboundItem(Request.Item item) {
+        return new InboundItem(
+                productRepository.getBy(item.productNo()),
+                item.quantity(),
+                item.unitPrice(),
+                item.description());
     }
 
     public record Request(String title,
