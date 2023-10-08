@@ -2,6 +2,7 @@ package com.kjh.wms.inbound.feature;
 
 import com.kjh.wms.inbound.domain.InboundRepository;
 import com.kjh.wms.product.domain.*;
+import com.kjh.wms.product.fixturer.ProductFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,20 +28,8 @@ class RegisterInboundTest {
     @Test
     @DisplayName("입고를 등록한다")
     void registerInbound() {
-        final Product product = new Product(
-                "name",
-                "code",
-                "description",
-                "brand",
-                "maker",
-                "origin",
-                Category.ELECTRONICS,
-                TemperatureZone.ROOM_TEMPERATURE,
-                1000L,
-                new ProductSize(100L, 100L, 100L)
-        );
         Mockito.when(productRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.of(product));
+                .thenReturn(Optional.of(ProductFixture.aProduct().build()));
 
         final Long productNo = 1L;
         final Long quantity = 1L;
@@ -64,4 +53,5 @@ class RegisterInboundTest {
         );
         registerInbound.request(request);
     }
+
 }
