@@ -1,6 +1,7 @@
 package com.kjh.wms.inbound.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -43,6 +44,12 @@ public class Inbound {
     @OneToMany(mappedBy = "inbound", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<InboundItem> inboundItems = new ArrayList<>();
 
+    @Getter(AccessLevel.PROTECTED)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Comment("입고 진행 상태")
+    private InboundStatus status = InboundStatus.REQUESTED;
+
     public Inbound(String title,
                    String description,
                    LocalDateTime orderRequestedAt,
@@ -74,5 +81,12 @@ public class Inbound {
         Assert.notNull(orderRequestedAt, "입고 요청일은 필수입니다");
         Assert.notNull(estimateArrivalAt, "입고 예정일은 필수입니다");
         Assert.notEmpty(inboundItems, "입고 품목은 필수입니다");
+    }
+
+    public void confirmed() {
+        if (status != InboundStatus.REQUESTED) {
+            throw new IllegalStateException("입고 요청 상태가 아닙니다");
+        }
+        status = InboundStatus.CONFIRMED;
     }
 }
