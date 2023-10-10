@@ -73,6 +73,7 @@ public class Inbound {
 
     @VisibleForTesting
     Inbound(Long inboundNo,
+            InboundStatus status,
             String title,
             String description,
             LocalDateTime orderRequestedAt,
@@ -80,6 +81,7 @@ public class Inbound {
             List<InboundItem> inboundItems) {
         this(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
         this.inboundNo = inboundNo;
+        this.status = status;
     }
 
     private void validateConstructor(final String title,

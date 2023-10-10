@@ -7,6 +7,7 @@ import java.util.List;
 public class InboundFixture {
 
     private Long inboundNo = 1L;
+    private InboundStatus status = InboundStatus.REQUESTED;
     private String title = "상품명";
     private String description = "입고 설명";
     private LocalDateTime orderRequestedAt = LocalDateTime.now();
@@ -17,8 +18,17 @@ public class InboundFixture {
         return new InboundFixture();
     }
 
+    public static InboundFixture aConfirmedInbound() {
+        return new InboundFixture().status(InboundStatus.CONFIRMED);
+    }
+
     public InboundFixture inboundNo(Long inboundNo) {
         this.inboundNo = inboundNo;
+        return this;
+    }
+
+    public InboundFixture status(InboundStatus status) {
+        this.status = status;
         return this;
     }
 
@@ -50,6 +60,7 @@ public class InboundFixture {
     public Inbound build() {
         return new Inbound(
                 inboundNo,
+                status,
                 title,
                 description,
                 orderRequestedAt,
