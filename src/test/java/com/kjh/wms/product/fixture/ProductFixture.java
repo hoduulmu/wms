@@ -1,9 +1,8 @@
-package com.kjh.wms.product.fixturer;
+package com.kjh.wms.product.fixture;
 
 import com.kjh.wms.product.domain.Category;
 import com.kjh.wms.product.domain.Product;
 import com.kjh.wms.product.domain.TemperatureZone;
-import com.kjh.wms.product.fixture.ProductSizeFixture;
 
 public class ProductFixture {
 

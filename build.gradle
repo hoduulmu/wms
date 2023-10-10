@@ -26,6 +26,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // For VisibleForTesting
+    implementation 'com.google.guava:guava:32.1.2-jre'
+
     // SQL Logger
     implementation 'p6spy:p6spy:3.9.1'
 
