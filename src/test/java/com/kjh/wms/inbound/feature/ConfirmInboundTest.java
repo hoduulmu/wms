@@ -12,7 +12,6 @@ import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,8 +43,8 @@ class ConfirmInboundTest {
                 ))
         );
 
-        Mockito.when(inboundRepository.findById(inboundNo))
-                .thenReturn(Optional.of(inbound));
+        Mockito.when(inboundRepository.getBy(inboundNo))
+                .thenReturn(inbound);
         confirmInbound.request(inboundNo);
 
         assertThat(inbound.getStatus()).isEqualTo(InboundStatus.CONFIRMED);
@@ -60,7 +59,7 @@ class ConfirmInboundTest {
         }
 
         public void request(Long inboundNo) {
-            final Inbound inbound = inboundRepository.findById(inboundNo).orElseThrow();
+            final Inbound inbound = inboundRepository.getBy(inboundNo);
             inbound.confirmed();
         }
     }
