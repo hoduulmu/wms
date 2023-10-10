@@ -1,7 +1,6 @@
 package com.kjh.wms.inbound.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -44,7 +43,7 @@ public class Inbound {
     @OneToMany(mappedBy = "inbound", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<InboundItem> inboundItems = new ArrayList<>();
 
-    @Getter(AccessLevel.PROTECTED)
+    @Getter
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     @Comment("입고 진행 상태")
