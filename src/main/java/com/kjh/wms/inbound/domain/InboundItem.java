@@ -1,5 +1,6 @@
 package com.kjh.wms.inbound.domain;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.kjh.wms.product.domain.Product;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
@@ -49,6 +50,16 @@ public class InboundItem {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.description = description;
+    }
+
+    @VisibleForTesting
+    InboundItem(Long inboundItemNo,
+                Product product,
+                Long quantity,
+                Long unitPrice,
+                String description) {
+        this(product, quantity, unitPrice, description);
+        this.inboundItemNo = inboundItemNo;
     }
 
     private void validateConstructor(final Product product,
