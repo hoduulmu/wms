@@ -2,6 +2,7 @@ package com.kjh.wms.common;
 
 import com.kjh.wms.inbound.feature.api.ConfirmInboundApi;
 import com.kjh.wms.inbound.feature.api.RegisterInboundApi;
+import com.kjh.wms.inbound.feature.api.RejectInboundApi;
 import com.kjh.wms.product.feature.api.RegisterProductApi;
 
 public class Scenario {
@@ -16,5 +17,9 @@ public class Scenario {
 
     public ConfirmInboundApi confirmInbound() {
         return new ConfirmInboundApi();
+    }
+
+    public RejectInboundApi rejectInbound() {
+        return new RejectInboundApi();
     }
 }
