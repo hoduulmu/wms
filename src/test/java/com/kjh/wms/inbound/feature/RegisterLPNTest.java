@@ -6,9 +6,12 @@ import com.kjh.wms.inbound.domain.Inbound;
 import com.kjh.wms.inbound.domain.InboundItem;
 import com.kjh.wms.inbound.domain.InboundRepository;
 import com.kjh.wms.inbound.domain.LPN;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -17,9 +20,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RegisterLPNTest extends ApiTest {
-
-    @Autowired
-    private RegisterLPN registerLPN;
 
     @Autowired
     private InboundRepository inboundRepository;
@@ -37,14 +37,20 @@ class RegisterLPNTest extends ApiTest {
         String lpnBarcode = "LPN-0001";
         LocalDateTime expirationAt = LocalDateTime.now().plusDays(1);
         RegisterLPN.Request request = new RegisterLPN.Request(
-                inboundItemNo,
                 lpnBarcode,
                 expirationAt
         );
 
-        registerLPN.request(request);
-        Inbound inbound = inboundRepository.getByInboundItemNo(inboundItemNo);
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/inbounds/inbound-items/{inboundItemNo}/lpns", inboundItemNo)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
 
+        // then
+        Inbound inbound = inboundRepository.getByInboundItemNo(inboundItemNo);
         InboundItem inboundItem = inbound.testingGetInboundItemBy(inboundItemNo);
         List<LPN> lpnList = inboundItem.testingGetLpnList();
         assertThat(lpnList).hasSize(1);

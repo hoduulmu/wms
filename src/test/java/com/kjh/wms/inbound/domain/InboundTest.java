@@ -56,7 +56,7 @@ class InboundTest {
     }
 
     @Test
-    @DisplayName("LPN을 등록한다")
+    @DisplayName("LPN 등록한다")
     void registerLPN() {
         final Inbound inbound = InboundFixture.aConfirmedInbound().build();
         final long inboundItemNo = 1L;
@@ -65,6 +65,35 @@ class InboundTest {
 
         inbound.registerLPN(inboundItemNo, lpnBarcode, expirationAt);
 
+        final InboundItem inboundItem = inbound.testingGetInboundItemBy(inboundItemNo);
+        assertThat(inboundItem.testingGetLpnList()).hasSize(1);
+    }
 
+    @Test
+    @DisplayName("LPN 등록한다 - [실패] 입고 확정 상태가 아닌 경우 예외가 발생한다")
+    void fail_invalid_status_registerLPN() {
+        final Inbound inbound = InboundFixture.anInbound().build();
+        final long inboundItemNo = 1L;
+        final String lpnBarcode = "LPN-0001";
+        final LocalDateTime expirationAt = LocalDateTime.now().plusDays(1);
+
+        assertThatThrownBy(
+                () -> inbound.registerLPN(inboundItemNo, lpnBarcode, expirationAt)
+        ).isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("입고 확정 상태가 아닙니다");
+    }
+
+    @Test
+    @DisplayName("LPN 등록한다 - [실패] 유통기한이 현재 시간보다 이전인 경우 예외가 발생한다")
+    void fail_expire_registerLPN() {
+        final Inbound inbound = InboundFixture.aConfirmedInbound().build();
+        final long inboundItemNo = 1L;
+        final String lpnBarcode = "LPN-0001";
+        final LocalDateTime expirationAt = LocalDateTime.now();
+
+        assertThatThrownBy(
+                () -> inbound.registerLPN(inboundItemNo, lpnBarcode, expirationAt)
+        ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("유통기한은 현재 시간보다 이후여야 합니다");
     }
 }

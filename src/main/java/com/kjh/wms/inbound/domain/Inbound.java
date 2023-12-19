@@ -131,9 +131,15 @@ public class Inbound {
     }
 
     private void validateRegisterLPN(Long inboundItemNo, String lpnBarcode, LocalDateTime expirationAt) {
+        if (status != InboundStatus.CONFIRMED) {
+            throw new IllegalStateException("입고 확정 상태가 아닙니다");
+        }
         Assert.notNull(inboundItemNo, "LPN 등록할 입고 상품 번호는 필수입니다");
         Assert.hasText(lpnBarcode, "LPN 바코드는 필수입니다");
         Assert.notNull(expirationAt, "유통기한은 필수입니다");
+        if (expirationAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("유통기한은 현재 시간보다 이후여야 합니다");
+        }
     }
 
     private InboundItem getInboundItemBy(Long inboundItemNo) {
