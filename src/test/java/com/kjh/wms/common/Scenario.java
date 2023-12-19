@@ -1,5 +1,6 @@
 package com.kjh.wms.common;
 
+import com.kjh.wms.inbound.feature.RegisterLPNApi;
 import com.kjh.wms.inbound.feature.api.ConfirmInboundApi;
 import com.kjh.wms.inbound.feature.api.RegisterInboundApi;
 import com.kjh.wms.inbound.feature.api.RejectInboundApi;
@@ -21,5 +22,9 @@ public class Scenario {
 
     public RejectInboundApi rejectInbound() {
         return new RejectInboundApi();
+    }
+
+    public RegisterLPNApi registerLPN() {
+        return new RegisterLPNApi();
     }
 }
