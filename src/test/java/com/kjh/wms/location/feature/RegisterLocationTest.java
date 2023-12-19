@@ -17,6 +17,7 @@ class RegisterLocationTest {
     @Test
     @DisplayName("로케이션을 등록한다")
     void registerLocation() {
+        RegisterLocation.Request request = new RegisterLocation.Request();
         registerLocation.request();
     }
 
@@ -24,6 +25,9 @@ class RegisterLocationTest {
 
         public void request() {
 
+        }
+
+        public record Request() {
         }
     }
 }
