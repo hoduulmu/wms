@@ -17,8 +17,13 @@ class RegisterLocationTest {
     @Test
     @DisplayName("로케이션을 등록한다")
     void registerLocation() {
+        registerLocation.request();
     }
 
     private class RegisterLocation {
+
+        public void request() {
+
+        }
     }
 }
