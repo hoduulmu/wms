@@ -123,4 +123,31 @@ public class Inbound {
             throw new IllegalStateException("입고 요청 상태가 아닙니다");
         }
     }
+
+    public void registerLPN(Long inboundItemNo, String lpnBarcode, LocalDateTime expirationAt) {
+        validateRegisterLPN(inboundItemNo, lpnBarcode, expirationAt);
+        final InboundItem inboundItem = getInboundItemBy(inboundItemNo);
+        inboundItem.registerLPN(lpnBarcode, expirationAt);
+    }
+
+    private void validateRegisterLPN(Long inboundItemNo, String lpnBarcode, LocalDateTime expirationAt) {
+        Assert.notNull(inboundItemNo, "LPN 등록할 입고 상품 번호는 필수입니다");
+        Assert.hasText(lpnBarcode, "LPN 바코드는 필수입니다");
+        Assert.notNull(expirationAt, "유통기한은 필수입니다");
+    }
+
+    private InboundItem getInboundItemBy(Long inboundItemNo) {
+        return inboundItems.stream()
+                .filter(inboundItem -> inboundItem.getInboundItemNo().equals(inboundItemNo))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당 입고 품목이 없습니다. %d".formatted(inboundItemNo)));
+    }
+
+    @VisibleForTesting
+    public InboundItem testingGetInboundItemBy(Long inboundItemNo) {
+        return inboundItems.stream()
+                .filter(inboundItem -> inboundItem.getInboundItemNo().equals(inboundItemNo))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당 입고 품목이 없습니다. %d".formatted(inboundItemNo)));
+    }
 }
