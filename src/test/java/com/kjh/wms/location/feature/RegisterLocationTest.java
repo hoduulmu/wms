@@ -5,6 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
+import java.util.HashMap;
+import java.util.Map;
+
 class RegisterLocationTest {
 
 
@@ -33,15 +36,36 @@ class RegisterLocationTest {
 
     private class RegisterLocation {
 
+        private LocationRepository locationRepository;
+
         public void request(Request request) {
            Location location =  request.toDomain();
+           locationRepository.save(location);
         }
 
         public record Request(String locationBarcode,
                               StorageType storageType,
                               UsagePurpose usagePurpose) {
+
+            public Request {
+                Assert.hasText(locationBarcode, "로케이션 바코드는 필수입니다");
+                Assert.notNull(storageType, "로케이션 유형은 필수입니다");
+                Assert.notNull(usagePurpose, "로케이션 용도는 필수입니다");
+            }
+
             public Location toDomain() {
                 return new Location(locationBarcode, storageType, usagePurpose);
+            }
+        }
+
+        private class LocationRepository {
+
+            private final Map<Long, Location> locations = new HashMap<>();
+            private Long sequence = 1L;
+
+            public void save(Location location) {
+                location.assignNo(sequence++);
+                locations.put(location.getLocationNo(), location);
             }
         }
     }
@@ -69,6 +93,8 @@ class RegisterLocationTest {
     }
 
     private static class Location {
+
+        private Long locationNo;
         private final String locationBarcode;
         private final StorageType storageType;
         private final UsagePurpose usagePurpose;
@@ -88,6 +114,14 @@ class RegisterLocationTest {
             Assert.hasText(locationBarcode, "로케이션 바코드는 필수입니다");
             Assert.notNull(storageType, "로케이션 유형은 필수입니다");
             Assert.notNull(usagePurpose, "로케이션 용도는 필수입니다");
+        }
+
+        public void assignNo(Long locationNo) {
+            this.locationNo = locationNo;
+        }
+
+        public Long getLocationNo() {
+            return locationNo;
         }
     }
 }
