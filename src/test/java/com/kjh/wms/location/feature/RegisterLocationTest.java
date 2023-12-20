@@ -6,16 +6,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class RegisterLocationTest {
 
 
     private RegisterLocation registerLocation;
+    private LocationRepository locationRepository;
 
     @BeforeEach
     void setUp() {
-        registerLocation = new RegisterLocation();
+        locationRepository = new LocationRepository();
+        registerLocation = new RegisterLocation(locationRepository);
     }
 
     @Test
@@ -32,15 +37,21 @@ class RegisterLocationTest {
                 usagePurpose
         );
         registerLocation.request(request);
+
+        assertThat(locationRepository.findAll()).hasSize(1);
     }
 
     private class RegisterLocation {
 
-        private LocationRepository locationRepository;
+        private final LocationRepository locationRepository;
+
+        private RegisterLocation(LocationRepository locationRepository) {
+            this.locationRepository = locationRepository;
+        }
 
         public void request(Request request) {
-           Location location =  request.toDomain();
-           locationRepository.save(location);
+            Location location = request.toDomain();
+            locationRepository.save(location);
         }
 
         public record Request(String locationBarcode,
@@ -57,22 +68,10 @@ class RegisterLocationTest {
                 return new Location(locationBarcode, storageType, usagePurpose);
             }
         }
-
-        private class LocationRepository {
-
-            private final Map<Long, Location> locations = new HashMap<>();
-            private Long sequence = 1L;
-
-            public void save(Location location) {
-                location.assignNo(sequence++);
-                locations.put(location.getLocationNo(), location);
-            }
-        }
     }
 
     enum StorageType {
-        TOTE("토트 바구니")
-        ;
+        TOTE("토트 바구니");
 
         private final String description;
 
@@ -82,8 +81,7 @@ class RegisterLocationTest {
     }
 
     enum UsagePurpose {
-        MOVE("이동 목적")
-        ;
+        MOVE("이동 목적");
 
         private final String description;
 
@@ -122,6 +120,21 @@ class RegisterLocationTest {
 
         public Long getLocationNo() {
             return locationNo;
+        }
+    }
+
+    private static class LocationRepository {
+
+        private final Map<Long, Location> locations = new HashMap<>();
+        private Long sequence = 1L;
+
+        public void save(Location location) {
+            location.assignNo(sequence++);
+            locations.put(location.getLocationNo(), location);
+        }
+
+        public List<Location> findAll() {
+            return List.copyOf(locations.values());
         }
     }
 }
