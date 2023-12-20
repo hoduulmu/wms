@@ -3,6 +3,7 @@ package com.kjh.wms.location.feature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.Assert;
 
 class RegisterLocationTest {
 
@@ -17,6 +18,7 @@ class RegisterLocationTest {
     @Test
     @DisplayName("로케이션을 등록한다")
     void registerLocation() {
+
         final String locationBarcode = "A-1-1";
         final StorageType storageType = StorageType.TOTE;
         final UsagePurpose usagePurpose = UsagePurpose.MOVE;
@@ -26,18 +28,21 @@ class RegisterLocationTest {
                 storageType,
                 usagePurpose
         );
-        registerLocation.request();
+        registerLocation.request(request);
     }
 
     private class RegisterLocation {
 
-        public void request() {
-
+        public void request(Request request) {
+           Location location =  request.toDomain();
         }
 
         public record Request(String locationBarcode,
                               StorageType storageType,
                               UsagePurpose usagePurpose) {
+            public Location toDomain() {
+                return new Location(locationBarcode, storageType, usagePurpose);
+            }
         }
     }
 
@@ -60,6 +65,29 @@ class RegisterLocationTest {
 
         UsagePurpose(String description) {
             this.description = description;
+        }
+    }
+
+    private static class Location {
+        private final String locationBarcode;
+        private final StorageType storageType;
+        private final UsagePurpose usagePurpose;
+
+        public Location(String locationBarcode,
+                        StorageType storageType,
+                        UsagePurpose usagePurpose) {
+            validateConstructor(locationBarcode, storageType, usagePurpose);
+            this.locationBarcode = locationBarcode;
+            this.storageType = storageType;
+            this.usagePurpose = usagePurpose;
+        }
+
+        private void validateConstructor(String locationBarcode,
+                                         StorageType storageType,
+                                         UsagePurpose usagePurpose) {
+            Assert.hasText(locationBarcode, "로케이션 바코드는 필수입니다");
+            Assert.notNull(storageType, "로케이션 유형은 필수입니다");
+            Assert.notNull(usagePurpose, "로케이션 용도는 필수입니다");
         }
     }
 }
