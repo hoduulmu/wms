@@ -1,9 +1,12 @@
 package com.kjh.wms.location.domain;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class LocationRepository {
 
     private final Map<Long, Location> locations = new HashMap<>();
