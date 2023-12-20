@@ -1,10 +1,10 @@
-package com.kjh.wms.location.feature;
+package com.kjh.wms.location.domain;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class LocationRepository {
+public class LocationRepository {
 
     private final Map<Long, Location> locations = new HashMap<>();
     private Long sequence = 1L;

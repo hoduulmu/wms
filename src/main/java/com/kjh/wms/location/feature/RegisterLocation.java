@@ -1,5 +1,9 @@
 package com.kjh.wms.location.feature;
 
+import com.kjh.wms.location.domain.Location;
+import com.kjh.wms.location.domain.LocationRepository;
+import com.kjh.wms.location.domain.StorageType;
+import com.kjh.wms.location.domain.UsagePurpose;
 import org.springframework.util.Assert;
 
 class RegisterLocation {

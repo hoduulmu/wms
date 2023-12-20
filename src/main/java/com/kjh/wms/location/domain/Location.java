@@ -1,9 +1,11 @@
-package com.kjh.wms.location.feature;
+package com.kjh.wms.location.domain;
 
+import lombok.Getter;
 import org.springframework.util.Assert;
 
-class Location {
+public class Location {
 
+    @Getter
     private Long locationNo;
     private final String locationBarcode;
     private final StorageType storageType;
@@ -28,9 +30,5 @@ class Location {
 
     public void assignNo(Long locationNo) {
         this.locationNo = locationNo;
-    }
-
-    public Long getLocationNo() {
-        return locationNo;
     }
 }

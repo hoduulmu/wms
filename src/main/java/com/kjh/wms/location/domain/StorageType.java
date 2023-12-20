@@ -1,6 +1,6 @@
-package com.kjh.wms.location.feature;
+package com.kjh.wms.location.domain;
 
-enum StorageType {
+public enum StorageType {
     TOTE("토트 바구니");
 
     private final String description;

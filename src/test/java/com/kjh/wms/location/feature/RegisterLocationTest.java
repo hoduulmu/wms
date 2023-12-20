@@ -1,5 +1,8 @@
 package com.kjh.wms.location.feature;
 
+import com.kjh.wms.location.domain.LocationRepository;
+import com.kjh.wms.location.domain.StorageType;
+import com.kjh.wms.location.domain.UsagePurpose;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
