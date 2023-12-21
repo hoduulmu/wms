@@ -16,12 +16,16 @@ class AssignLocationLPNTest {
     @Test
     @DisplayName("로케이션에 LPN 할당한다")
     void assignLocationLPN() {
-        assignLocationLPN.request();
+        AssignLocationLPN.Request request = new AssignLocationLPN.Request();
+        assignLocationLPN.request(request);
     }
 
     private class AssignLocationLPN {
-        public void request() {
+        public void request(Request request) {
 
+        }
+
+        public record Request() {
         }
     }
 }
