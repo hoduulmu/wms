@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Comment("로케이션")
 @Table(name = "location")
@@ -33,6 +36,9 @@ public class Location {
     @Comment("보관 목적")
     private UsagePurpose usagePurpose;
 
+    @Getter
+    private List<LocationLPN> locationLPNs = new ArrayList<>();
+
     public Location(String locationBarcode,
                     StorageType storageType,
                     UsagePurpose usagePurpose) {
@@ -51,6 +57,12 @@ public class Location {
     }
 
     public void assignLPN(LPN lpn) {
-
+        Assert.notNull(lpn, "LPN은 필수입니다");
+        locationLPNs.stream()
+                .filter(locationLPN -> locationLPN.getLpn().equals(lpn))
+                .findFirst()
+                .ifPresentOrElse(
+                        LocationLPN::increaseInventoryQuantity,
+                        () -> locationLPNs.add(new LocationLPN(this, lpn)));
     }
 }
