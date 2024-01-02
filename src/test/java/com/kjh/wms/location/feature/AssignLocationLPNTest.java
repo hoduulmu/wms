@@ -1,5 +1,7 @@
 package com.kjh.wms.location.feature;
 
+import com.kjh.wms.inbound.domain.LPN;
+import com.kjh.wms.inbound.domain.LPNRepository;
 import com.kjh.wms.location.domain.Location;
 import com.kjh.wms.location.domain.LocationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,10 +29,11 @@ class AssignLocationLPNTest {
 
     private class AssignLocationLPN {
         private LocationRepository locationRepository;
+        private LPNRepository lpnRepository;
 
         public void request(Request request) {
             Location location = locationRepository.getByLocationBarcode(request.locationBarcode());
-
+            LPN lpn = lpnRepository.getByLpnBarcode(request.lpnBarcode());
         }
 
         public record Request(String locationBarcode,
