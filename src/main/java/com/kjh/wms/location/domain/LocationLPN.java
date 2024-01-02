@@ -9,6 +9,8 @@ public class LocationLPN {
 
     @Getter
     private LPN lpn;
+
+    @Getter
     private Long inventoryQuantity;
 
     public LocationLPN(Location location, LPN lpn) {
