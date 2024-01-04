@@ -23,7 +23,7 @@ public class Location {
     private String locationBarcode;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "storage_type", nullable = false)
+    @Column(name = "storage_typegg", nullable = false)
     @Comment("보관 타입")
     private StorageType storageType;
 
